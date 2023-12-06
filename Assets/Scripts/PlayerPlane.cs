@@ -58,14 +58,14 @@ public class PlayerPlane : MonoBehaviour
 
     void Ray()
     {
-        Collider hit = Physics.OverlapBox(transform.position + new Vector3(0, 0.5f, 0), new Vector3(3f, 0.5f, 1f), Quaternion.identity, LayerMask.GetMask("Ball")).FirstOrDefault();
+        Collider hit = Physics.OverlapBox(transform.position + new Vector3(0, 0.5f, 0), new Vector3(4f, 0.5f, 1f), Quaternion.identity, LayerMask.GetMask("Ball")).FirstOrDefault();
 
         if (hit != null)
         {
             if (!scaned)
             {
                 ballRigid = hit.GetComponent<Rigidbody>();
-                ballDir = ballRigid.velocity + new Vector3(hAxis * 1.5f, 0, 0);
+                ballDir = ballRigid.velocity + new Vector3(hAxis * 1.8f, 0, 0);
                 scaned = true;
             }
         }
@@ -78,14 +78,14 @@ public class PlayerPlane : MonoBehaviour
     void OnDrawGizmos()
     {
         Gizmos.color = new Color(0, 1, 0);
-        Gizmos.DrawWireCube(transform.position + new Vector3(0, 0.5f, 0), new Vector3(3f, 0.5f, 1f));
+        Gizmos.DrawWireCube(transform.position + new Vector3(0, 0.5f, 0), new Vector3(4f, 0.5f, 1f));
     }
 
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "ball")
         {
-            ballRigid.AddForce(ballDir * -1.5f, ForceMode.Impulse);
+            ballRigid.AddForce(new Vector3(ballDir.x, ballDir.y * -1f, ballDir.z), ForceMode.Impulse);
         }
 
         // 벽에 막히게

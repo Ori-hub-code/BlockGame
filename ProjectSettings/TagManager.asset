@@ -8,6 +8,7 @@ TagManager:
   - leftWall
   - rightWall
   - deadLine
+  - block
   layers:
   - Default
   - TransparentFX
