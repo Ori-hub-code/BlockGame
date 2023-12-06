@@ -22,7 +22,7 @@ public class Ball : MonoBehaviour
 
     void Update()
     {
-        float maxSpeed = 25.0f;
+        float maxSpeed = 20.0f;
 
         // x와 y 속도를 각각 최대 속도로 Clamp
         rigid.velocity = new Vector3(
