@@ -34,12 +34,9 @@ public class Ball : MonoBehaviour
 
     IEnumerator resetPos()
     {
-        gameObject.SetActive(false);
         gameObject.transform.position = new Vector3(0, -4, 0);
         rigid.velocity = Vector3.zero;
         yield return new WaitForSeconds(0.5f);
-        Debug.Log("a");
-        gameObject.SetActive(true);
         rigid.AddForce(Vector3.down * 7f, ForceMode.Impulse);
         isDead = false;
     }
