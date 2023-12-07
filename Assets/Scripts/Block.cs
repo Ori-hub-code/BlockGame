@@ -4,11 +4,76 @@ using UnityEngine;
 
 public class Block : MonoBehaviour
 {
+    MeshRenderer renderer;
+
+    public Material[] material;
+    public int hp;
+    int ran;
+    bool damaged;
+
+    void Awake()
+    {
+        renderer = GetComponent<MeshRenderer>();
+
+        damaged = false;
+    }
+
+    void Start()
+    {
+        ran = Random.Range(0, 4);
+
+        renderer.material = material[ran];
+
+        switch(ran)
+        {
+            case 0:
+                hp = 1;
+                break;
+            case 1:
+                hp = 2;
+                break;
+            case 2:
+                hp = 3;
+                break;
+            case 3:
+                hp = 4;
+                break;
+
+        }
+    }
+
+    IEnumerator CanDamaged()
+    {
+        hp--;
+        damaged = true;
+        
+        if(ran <= 0)
+        {
+            ran = 0;
+        } else
+        {
+            renderer.material = material[ran - 1];
+        }
+
+        ran--;
+        yield return new WaitForSeconds(0.3f);
+        damaged = false;
+    }
+
+
     void OnCollisionEnter(Collision collision)
     {
         if(collision.gameObject.tag == "ball")
         {
-            gameObject.SetActive(false);
+            if(!damaged)
+            {
+                StartCoroutine(CanDamaged());
+            }
+
+            if(hp <= 0)
+            {
+                gameObject.SetActive(false);
+            }
         }
     }
 }
