@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class GameManager : MonoBehaviour
@@ -9,10 +10,16 @@ public class GameManager : MonoBehaviour
     public Ball ballLogic;
     public GameObject[] blocks;
 
+    public Text count;
+    public int blockCount;
 
-    // Update is called once per frame
+    void Start()
+    {
+        blockCount = blocks.Length;
+    }
+
     void Update()
     {
-        
+        count.text = blockCount.ToString();
     }
 }

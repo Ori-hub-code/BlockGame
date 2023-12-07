@@ -11,6 +11,8 @@ public class Block : MonoBehaviour
     int ran;
     bool damaged;
 
+    public GameManager gameManager;
+
     void Awake()
     {
         renderer = GetComponent<MeshRenderer>();
@@ -20,6 +22,9 @@ public class Block : MonoBehaviour
 
     void Start()
     {
+        gameManager = FindFirstObjectByType<GameManager>();
+
+        // »ö ·£´ý ºÎ¿©
         ran = Random.Range(0, 4);
 
         renderer.material = material[ran];
@@ -73,6 +78,7 @@ public class Block : MonoBehaviour
             if(hp <= 0)
             {
                 gameObject.SetActive(false);
+                gameManager.blockCount--;
             }
         }
     }
