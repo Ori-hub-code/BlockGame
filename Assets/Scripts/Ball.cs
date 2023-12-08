@@ -7,17 +7,16 @@ public class Ball : MonoBehaviour
     Rigidbody rigid;
 
     bool isDead;
+    bool started;
 
-    private void Awake()
+    public GameManager gameManager;
+
+    void Awake()
     {
         rigid = GetComponent<Rigidbody>();
 
         isDead = false;
-    }
-
-    void Start()
-    {
-        rigid.AddForce(Vector3.down * 3f, ForceMode.Impulse);
+        started = false;
     }
 
     void Update()
@@ -30,6 +29,12 @@ public class Ball : MonoBehaviour
             Mathf.Clamp(rigid.velocity.y, -maxSpeed, maxSpeed),
             rigid.velocity.z
         );
+
+        if(gameManager.gameStart && !started && Input.anyKeyDown)
+        {
+            rigid.AddForce(Vector3.down * 3f, ForceMode.Impulse);
+            started = true;
+        }
     }
 
     IEnumerator resetPos()

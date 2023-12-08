@@ -52,6 +52,7 @@ public class Block : MonoBehaviour
         hp--;
         damaged = true;
         
+        // 맞았을 때 색 변경
         if(ran <= 0)
         {
             ran = 0;

@@ -13,6 +13,13 @@ public class GameManager : MonoBehaviour
     public Text count;
     public int blockCount;
 
+    public bool gameStart;
+
+    void Awake()
+    {
+        gameStart = false;
+    }
+
     void Start()
     {
         blockCount = blocks.Length;
@@ -20,6 +27,13 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        // 남은 블럭 카운트
         count.text = blockCount.ToString();
+
+        // 남은 블럭 0 일 시 게임 종료
+        if(blockCount == 0)
+        {
+            gameStart = false;
+        }
     }
 }
