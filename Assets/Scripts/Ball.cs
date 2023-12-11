@@ -75,6 +75,9 @@ public class Ball : MonoBehaviour
                     gameManager.gameStart = false;
                     gameObject.SetActive(false);
                     uiManager.GameOver.SetActive(true);
+                    uiManager.RankingBtn.SetActive(true);
+
+                    gameManager.ScoreSet(gameManager.playerScore, uiManager.userName);
                 } else
                 {
                     StartCoroutine(resetPos());

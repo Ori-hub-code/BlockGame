@@ -67,8 +67,9 @@ public class Block : MonoBehaviour
         }
 
         ran--;
-        yield return new WaitForSeconds(0.3f);
+
         damaged = false;
+        yield return new WaitForSeconds(0.3f);
     }
 
 
