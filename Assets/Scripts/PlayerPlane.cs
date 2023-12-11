@@ -18,6 +18,8 @@ public class PlayerPlane : MonoBehaviour
     Rigidbody rigid;
     Rigidbody ballRigid;
 
+    public GameManager gameManager;
+
     void Awake()
     {
         moveDir = Vector3.zero;
@@ -30,12 +32,18 @@ public class PlayerPlane : MonoBehaviour
 
     void Update()
     {
-        Move();
-        Ray();
+        if(!gameManager.gameOver)
+        {
+            Move();
+            Ray();
+        }
     }
     void LateUpdate()
     {
-        transform.position += moveDir * speed * Time.deltaTime;
+        if(!gameManager.gameOver)
+        {
+            transform.position += moveDir * speed * Time.deltaTime;
+        }
     }
 
     void Move()

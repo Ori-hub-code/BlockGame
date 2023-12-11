@@ -24,12 +24,17 @@ public class Block : MonoBehaviour
     {
         gameManager = FindFirstObjectByType<GameManager>();
 
+        RandomColor();
+    }
+
+    public void RandomColor()
+    {
         // 색 랜덤 부여
         ran = Random.Range(0, 4);
 
         renderer.material = material[ran];
 
-        switch(ran)
+        switch (ran)
         {
             case 0:
                 hp = 1;
@@ -74,12 +79,20 @@ public class Block : MonoBehaviour
             if(!damaged)
             {
                 StartCoroutine(CanDamaged());
+
             }
 
             if(hp <= 0)
             {
                 gameObject.SetActive(false);
                 gameManager.blockCount--;
+
+                // 점수 추가
+                gameManager.playerScore += 200;
+            } else
+            {
+                // 점수 추가
+                gameManager.playerScore += 100;
             }
         }
     }

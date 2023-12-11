@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class Ball : MonoBehaviour
 {
@@ -8,8 +9,10 @@ public class Ball : MonoBehaviour
 
     bool isDead;
     bool started;
+    public int health;
 
     public GameManager gameManager;
+    public UIManager uiManager;
 
     void Awake()
     {
@@ -17,6 +20,15 @@ public class Ball : MonoBehaviour
 
         isDead = false;
         started = false;
+        health = 3;
+    }
+
+    void OnEnable()
+    {
+        isDead = false;
+        started = false;
+        health = 3;
+        rigid.velocity = Vector3.zero;
     }
 
     void Update()
@@ -32,7 +44,7 @@ public class Ball : MonoBehaviour
 
         if(gameManager.gameStart && !started && Input.anyKeyDown)
         {
-            rigid.AddForce(Vector3.down * 3f, ForceMode.Impulse);
+            rigid.AddForce(Vector3.down * 7f, ForceMode.Impulse);
             started = true;
         }
     }
@@ -52,8 +64,21 @@ public class Ball : MonoBehaviour
         {
             if(!isDead)
             {
+                health--;
                 isDead = true;
-                StartCoroutine(resetPos());
+
+                if(health == 0)
+                {
+                    gameObject.transform.position = new Vector3(0, -4, 0);
+                    rigid.velocity = Vector3.zero;
+                    gameManager.gameOver = true;
+                    gameManager.gameStart = false;
+                    gameObject.SetActive(false);
+                    uiManager.GameOver.SetActive(true);
+                } else
+                {
+                    StartCoroutine(resetPos());
+                }
             }
         }
     }

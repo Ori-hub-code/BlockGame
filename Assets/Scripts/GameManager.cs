@@ -10,14 +10,21 @@ public class GameManager : MonoBehaviour
     public Ball ballLogic;
     public GameObject[] blocks;
 
-    public Text count;
     public int blockCount;
 
     public bool gameStart;
+    public bool gameOver;
+
+    public int playerScore;
+
+    public UIManager uiManager;
 
     void Awake()
     {
         gameStart = false;
+        gameOver = false;
+
+        playerScore = 0;
     }
 
     void Start()
@@ -28,7 +35,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         // 남은 블럭 카운트
-        count.text = blockCount.ToString();
+        uiManager.count.text = blockCount.ToString();
 
         // 남은 블럭 0 일 시 게임 종료
         if(blockCount == 0)
