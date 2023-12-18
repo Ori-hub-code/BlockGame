@@ -5,14 +5,16 @@ using UnityEngine.SocialPlatforms.Impl;
 
 public class Ball : MonoBehaviour
 {
-    Rigidbody rigid;
+    public Rigidbody rigid;
 
     bool isDead;
-    bool started;
+    public bool started;
     public int health;
 
     public GameManager gameManager;
     public UIManager uiManager;
+
+    public bool onPopup;
 
     void Awake()
     {
@@ -21,6 +23,8 @@ public class Ball : MonoBehaviour
         isDead = false;
         started = false;
         health = 3;
+
+        onPopup = false;
     }
 
     void OnEnable()
@@ -42,11 +46,21 @@ public class Ball : MonoBehaviour
             rigid.velocity.z
         );
 
-        if(gameManager.gameStart && !started && Input.anyKeyDown)
+        if (gameManager.gameStart && !started && Input.anyKeyDown)
         {
             rigid.AddForce(Vector3.down * 7f, ForceMode.Impulse);
             started = true;
         }
+
+        if(onPopup)
+        {
+            Time.timeScale = 0;
+        } else
+        {
+            Time.timeScale = 1;
+        }
+
+        
     }
 
     IEnumerator resetPos()
@@ -77,7 +91,7 @@ public class Ball : MonoBehaviour
                     uiManager.GameOver.SetActive(true);
                     uiManager.RankingBtn.SetActive(true);
 
-                    gameManager.ScoreSet(gameManager.playerScore, uiManager.userName);
+                    // gameManager.ScoreSet(gameManager.playerScore, uiManager.userName);
                 } else
                 {
                     StartCoroutine(resetPos());

@@ -6,16 +6,24 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     public InputField idInput;
-    public InputField passInput;
 
     List<string> idList;
-    List<string> passList;
 
     public GameObject LoginSystem;
+    public GameObject GameSystem;
+    public GameObject ResultSystem;
     public GameObject GameOver;
     public GameObject GameClear;
     public GameObject Ranking;
     public GameObject RankingBtn;
+
+    // 팝업창
+    public GameObject QuitPopup;
+    public GameObject CheckUserNamePopUp;
+    public GameObject GameStartPopUp;
+    public GameObject HomePopup;
+    public GameObject RankingPopup;
+    public GameObject RestartPopup;
 
     public GameManager gameManager;
     public Ball ballLogic;
@@ -23,7 +31,6 @@ public class UIManager : MonoBehaviour
     public GameObject playerBall;
     public GameObject playerPlane;
 
-    public Text count;
     public Text score;
     public Text health;
 
@@ -34,22 +41,30 @@ public class UIManager : MonoBehaviour
     public Text thirdUser;
     public Text fourthUser;
     public Text fifthUser;
+    public Text sixthUser;
+    public Text seventhUser;
+    public Text eighthUser;
+    public Text ninthUser;
+    public Text tenthUser;
 
     public Text firstScore;
     public Text secondScore;
     public Text thirdScore;
     public Text fourthScore;
     public Text fifthScore;
+    public Text sixtScore;
+    public Text seventhScore;
+    public Text eightScore;
+    public Text ninthScore;
+    public Text tenthScore;
 
     void Awake()
     {
         idList = new List<string>();
-        passList = new List<string>();
     }
 
     void Update()
     {
-        count.text = gameManager.blockCount.ToString();
         score.text = gameManager.playerScore.ToString();
         health.text = ballLogic.health.ToString();
 
@@ -58,108 +73,75 @@ public class UIManager : MonoBehaviour
         thirdUser.text = gameManager.bestName[2].ToString();
         fourthUser.text = gameManager.bestName[3].ToString();
         fifthUser.text = gameManager.bestName[4].ToString();
+        sixthUser.text = gameManager.bestName[5].ToString();
+        seventhUser.text = gameManager.bestName[6].ToString();
+        eighthUser.text = gameManager.bestName[7].ToString();
+        ninthUser.text = gameManager.bestName[8].ToString();
+        tenthUser.text = gameManager.bestName[9].ToString();
 
         firstScore.text = gameManager.bestScore[0].ToString();
         secondScore.text = gameManager.bestScore[1].ToString();
         thirdScore.text = gameManager.bestScore[2].ToString();
         fourthScore.text = gameManager.bestScore[3].ToString();
         fifthScore.text = gameManager.bestScore[4].ToString();
+        sixtScore.text = gameManager.bestScore[5].ToString();
+        seventhScore.text = gameManager.bestScore[6].ToString();
+        eightScore.text = gameManager.bestScore[7].ToString();
+        ninthScore.text = gameManager.bestScore[8].ToString();
+        tenthScore.text = gameManager.bestScore[9].ToString();
     }
 
-    // 회원가입
-    public void MakeUser()
+    public void GameStartCheck()
     {
+        gameManager.gameStart = true;
+        LoginSystem.SetActive(false);
+        GameStartPopUp.SetActive(false);
+        GameSystem.SetActive(true);
+        ResultSystem.SetActive(false);
+        RestartPopup.SetActive(false);
+        GameOver.SetActive(false);
+        GameClear.SetActive(false);
+        RankingBtn.SetActive(false);
+        userName = idInput.text;
 
-        string userId = idInput.text;
-        string userPass = passInput.text;
-
-        if (!string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(userPass))
+        gameManager.gameStart = true;
+        gameManager.gameOver = false;
+        gameManager.playerScore = 0;
+        ballLogic.health = 3;
+        ballLogic.started = false;
+        ballLogic.rigid.velocity = Vector3.zero;
+        playerBall.transform.position = new Vector3(0, -4, 0);
+        playerPlane.transform.position = new Vector3(0, -10.25f, 0);
+        playerBall.SetActive(true);
+        idInput.text = "";
+        ballLogic.onPopup = false;
+    }
+    // 게임시작
+    public void GameStart()
+    {
+        if (!string.IsNullOrEmpty(idInput.text))
         {
-            if(idList.Contains(userId))
-            {
-                Debug.Log("이미 존재하는 ID 입니다.");
-            } else
-            {
-                idList.Add(userId);
-                passList.Add(userPass);
+            GameStartPopUp.SetActive(true);
 
-                Debug.Log("ID : " + userId + "    PW : " + userPass);
-
-                idInput.text = "";
-                passInput.text = "";
+            // 블럭들 초기화
+            for (int i = 0; i < gameManager.blocks.Length; i++)
+            {
+                Block blockLogic = gameManager.blocks[i].GetComponent<Block>();
+                blockLogic.RandomColor();
+                gameManager.blocks[i].SetActive(true);
             }
+
         }
         else
         {
-            Debug.Log("회원가입 실패");
+            CheckUserNamePopUp.SetActive(true);
         }
-
-        // 만약 비밀번호 필요 없을 시 이 코드 대신 사용
-
-        //if (string.IsNullOrEmpty(userId))
-        //{
-        //    Debug.LogWarning("사용자명은 비어있을 수 없습니다.");
-        //    return;
-        //}
-
-        //// 사용자가 이미 존재하는지 확인
-        //if (PlayerPrefs.HasKey(idInput.text))
-        //{
-        //    Debug.LogWarning("이미 사용자가 존재합니다.");
-        //    return;
-        //}
-
-        //// 데이터 저장
-        //PlayerPrefs.SetString("userId", userId);
-        //PlayerPrefs.Save();
-
-        //// 인풋필드 초기화
-        //idInput.text = "";
-        //passInput.text = "";
-    }
-
-    // 로그인
-    public void Login()
-    {
-        if (idList.Contains(idInput.text) && passList.Contains(passInput.text) && idList.IndexOf(idInput.text) == passList.IndexOf(passInput.text))
-        {
-            gameManager.gameStart = true;
-            LoginSystem.SetActive(false);
-
-            userName = idInput.text;
-            RankingBtn.SetActive(false);
-        }
-        else
-        {
-            Debug.Log("로그인 실패");
-        }
-
-        // 만약 비밀번호 필요 없을 시 이 코드 대신 사용
-        // PlayerPrefs -> 게임을 종료해도 데이터 저장이 됨.
-
-        //if (PlayerPrefs.HasKey(idInput.text))
-        //{
-        //    gameManager.gameStart = true;
-        //    LoginSystem.SetActive(false);
-        //}
-        //else
-        //{
-        //    Debug.Log("로그인 실패");
-        //}
 
     }
 
     public void Restart()
     {
-        gameManager.gameStart = true;
-        gameManager.gameOver = false;
-        gameManager.playerScore = 0;
-        gameManager.blockCount = gameManager.blocks.Length;
-        GameOver.SetActive(false);
-        RankingBtn.SetActive(false);
-
-        playerBall.SetActive(true);
-        playerPlane.transform.position = new Vector3(0, -10.25f, 0);
+        RestartPopup.SetActive(true);
 
         // 블럭들 초기화
         for (int i = 0; i < gameManager.blocks.Length; i++)
@@ -172,11 +154,65 @@ public class UIManager : MonoBehaviour
 
     public void CheckRanking()
     {
-        Ranking.SetActive(true);
+        ResultSystem.SetActive(true);
+        GameSystem.SetActive(false);
+        RankingPopup.SetActive(false);
+        GameOver.SetActive(false);
+        GameClear.SetActive(false);
+        RankingBtn.SetActive(false);
+
+        gameManager.ScoreSet(gameManager.playerScore, userName);
     }
 
     public void CloseRanking()
     {
         Ranking.SetActive(false);
     }
+
+    public void CheckGameQuit()
+    {
+        QuitPopup.SetActive(true);
+    }
+
+    public void GameQuit()
+    {
+        Application.Quit();
+    }
+
+    public void HomeButton()
+    {
+        HomePopup.SetActive(true);
+
+        ballLogic.onPopup = true;
+    }
+
+    public void GoHome()
+    {
+        LoginSystem.SetActive(true);
+        GameSystem.SetActive(false);
+        ResultSystem.SetActive(false);
+        HomePopup.SetActive(false);
+
+        gameManager.gameStart = false;
+    }
+    
+    public void RankingPopUp()
+    {
+        RankingPopup.SetActive(true);
+
+        ballLogic.onPopup = true;
+    }
+
+    public void CloseButton()
+    {
+        QuitPopup.SetActive(false);
+        CheckUserNamePopUp.SetActive(false);
+        GameStartPopUp.SetActive(false);
+        HomePopup.SetActive(false);
+        RankingPopup.SetActive(false);
+        RestartPopup.SetActive(false);
+
+        ballLogic.onPopup = false;
+    }
+
 }

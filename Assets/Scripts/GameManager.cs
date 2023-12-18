@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,9 +20,9 @@ public class GameManager : MonoBehaviour
 
     public UIManager uiManager;
 
-    // 랭킹 시스템 5위까지만 출력
-    public float[] bestScore = new float[5];
-    public string[] bestName = new string[5];
+    // 랭킹 시스템 10위까지만 출력
+    public float[] bestScore;
+    public string[] bestName;
 
     void Awake()
     {
@@ -34,13 +35,20 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         blockCount = blocks.Length;
+
+        bestScore = new float[10];
+        bestName = new string[10];
+
+        for (int i = 0; i < 10; i++)
+        {
+            // 저장된 최고점수와 이름 가져오기
+            bestScore[i] = PlayerPrefs.GetFloat(i + "BestScore");
+            bestName[i] = PlayerPrefs.GetString(i + "BestName");
+        }
     }
 
     void Update()
     {
-        // 남은 블럭 카운트
-        uiManager.count.text = blockCount.ToString();
-
         // 남은 블럭 0 일 시 게임 종료
         if(blockCount == 0)
         {
@@ -61,7 +69,7 @@ public class GameManager : MonoBehaviour
         float tmpScore = 0f;
         string tmpName = "";
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 10; i++)
         {
             // 저장된 최고점수와 이름 가져오기
             bestScore[i] = PlayerPrefs.GetFloat(i + "BestScore");
@@ -83,7 +91,7 @@ public class GameManager : MonoBehaviour
         }
 
         // 랭킹에 맞춰 점수와 이름 저장
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 10; i++)
         {
             PlayerPrefs.SetFloat(i + "BestScore", bestScore[i]);
             PlayerPrefs.SetString(i.ToString() + "BestName", bestName[i]);
